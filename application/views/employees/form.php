@@ -221,7 +221,7 @@ $(document).ready(function()
 				<?php
 				}
 				?>
-				minlength: 8
+				minlength: 5
 			},	
 			repeat_password:
 			{

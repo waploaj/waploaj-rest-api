@@ -306,6 +306,24 @@ class Customer extends Person
 			{
 				$suggestions[] = array('value' => $row->person_id, 'label' => $row->company_name);
 			}
+			$this->db->from('customers');
+			$this->db->join('people', 'customers.person_id = people.person_id');
+			$this->db->where('deleted', 0);
+			$this->db->like('store_bussiness_name', $search);
+			$this->db->order_by('store_bussiness_name', 'asc');
+			foreach($this->db->get()->result() as $row)
+			{
+				$suggestions[] = array('value' => $row->person_id, 'label' => $row->store_bussiness_name);
+			}
+			$this->db->from('people');
+			$this->db->join('people', 'customers.person_id = people.person_id');
+			$this->db->where('deleted', 0);
+			$this->db->like('address_1', $search);
+			$this->db->order_by('address_1', 'asc');
+			foreach($this->db->get()->result() as $row)
+			{
+				$suggestions[] = array('value' => $row->person_id, 'label' => $row->address_1);
+			}
 		}
 
 		//only return $limit suggestions
@@ -342,7 +360,9 @@ class Customer extends Person
 			$this->db->like('first_name', $search);
 			$this->db->or_like('last_name', $search);
 			$this->db->or_like('email', $search);
+			$this->db->or_like('store_bussiness_name', $search);
 			$this->db->or_like('phone_number', $search);
+			$this->db->or_like('address_1', $search);
 			$this->db->or_like('account_number', $search);
 			$this->db->or_like('company_name', $search);
 			$this->db->or_like('CONCAT(first_name, " ", last_name)', $search);

@@ -131,6 +131,7 @@
 						</div>
 					</div>
 					
+					
 					<div class="form-group form-group-sm">
 						<?php echo form_label($this->lang->line('customers_max'), 'max', array('class' => 'control-label col-xs-3')); ?>
 						<div class="col-xs-4">

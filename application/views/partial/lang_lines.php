@@ -14,4 +14,5 @@
 
 
 })(window.lang = window.lang || {}, jQuery);
+
 </script>

@@ -212,6 +212,7 @@ class Customers extends Persons
 		$first_name = $this->xss_clean($this->input->post('first_name'));
 		$last_name = $this->xss_clean($this->input->post('last_name'));
 		$email = $this->xss_clean(strtolower($this->input->post('email')));
+		$store_bussiness_name = $this->xss_clean($this->input->post('store_bussiness_name'));
 
 		// format first and last name properly
 		$first_name = $this->nameize($first_name);
@@ -234,6 +235,7 @@ class Customers extends Persons
 
 		$customer_data = array(
 			'account_number' => $this->input->post('account_number') == '' ? NULL : $this->input->post('account_number'),
+			'store_bussiness_name' => $this->input->post('store_bussiness_name') == '' ? NULL : $this->input->post('store_bussiness_name'),
 			'company_name' => $this->input->post('company_name') == '' ? NULL : $this->input->post('company_name'),
 			'discount_percent' => $this->input->post('discount_percent') == '' ? 0.00 : $this->input->post('discount_percent'),
 			'package_id' => $this->input->post('package_id') == '' ? NULL : $this->input->post('package_id'),
@@ -358,7 +360,7 @@ class Customers extends Persons
 					// XSS file data sanity check
 					$data = $this->xss_clean($data);
 
-					if(sizeof($data) >= 15)
+					if(sizeof($data) >= 24)
 					{
 						$email = strtolower($data[3]);
 						$person_data = array(
@@ -379,7 +381,17 @@ class Customers extends Persons
 						$customer_data = array(
 							'company_name'		=> $data[12],
 							'discount_percent'	=> $data[14],
-							'taxable'			=> $data[15] == '' ? 0 : 1
+							'taxable'			=> $data[15] == '' ? 0 : 1,
+							'store_bussiness_name' => $data[16],
+							'retail_type' => $data[17],
+							'channel' => $data[18],
+							'latitudde' => $data[19],
+							'longitude' => $data[20],
+							'territory' => $data[21],
+							'visit1' => $data[22],
+							'visit2' => $data[23] 
+							
+
 						);
 						$account_number = $data[13];
 

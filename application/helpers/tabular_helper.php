@@ -63,6 +63,7 @@ function get_sales_manage_table_headers()
 		array('sale_id' => $CI->lang->line('common_id')),
 		array('sale_time' => $CI->lang->line('sales_sale_time')),
 		array('customer_name' => $CI->lang->line('customers_customer')),
+		array('store_bussiness_name' => ('shop name')),
 		array('amount_due' => $CI->lang->line('sales_amount_due')),
 		array('amount_tendered' => $CI->lang->line('sales_amount_tendered')),
 		array('change_due' => $CI->lang->line('sales_change_due')),
@@ -89,9 +90,12 @@ function get_sale_data_row($sale)
 	$controller_name = $CI->uri->segment(1);
 
 	$row = array (
+		'sale.customer_id.customer.person_id' => $sale->customer->person_id,
+		'customers.person_id' => $customers->person_id,
 		'sale_id' => $sale->sale_id,
 		'sale_time' => date($CI->config->item('dateformat') . ' ' . $CI->config->item('timeformat'), strtotime($sale->sale_time)),
 		'customer_name' => $sale->customer_name,
+		'store_bussiness_name' => $customers->store_bussiness_name,
 		'amount_due' => to_currency($sale->amount_due),
 		'amount_tendered' => to_currency($sale->amount_tendered),
 		'change_due' => to_currency($sale->change_due),
@@ -227,8 +231,14 @@ function get_customer_manage_table_headers()
 		array('people.person_id' => $CI->lang->line('common_id')),
 		array('last_name' => $CI->lang->line('common_last_name')),
 		array('first_name' => $CI->lang->line('common_first_name')),
-		array('email' => $CI->lang->line('common_email')),
-		array('phone_number' => $CI->lang->line('common_phone_number')),
+		array('store_bussiness_name' => ('shop name')),	
+		array('retail_type' => ('Retail type')),
+		array('channel' => ('channel')),
+		array('address_1' => ('address')),
+		array('latitude' => ('latitude')),
+		array('longitude' => ('longitude')),
+		array('email' => $CI->lang->line('common_email')),			
+		array('phone_number' =>$CI->lang->line ('common_phone_number')),
 		array('total' => $CI->lang->line('common_total_spent'), 'sortable' => FALSE)
 	);
 
@@ -249,11 +259,18 @@ function get_customer_data_row($person, $stats)
 	$controller_name = strtolower(get_class($CI));
 
 	return array (
+		'customers.person_id' => $customers->person_id,
 		'people.person_id' => $person->person_id,
 		'last_name' => $person->last_name,
 		'first_name' => $person->first_name,
+		'retail_type' => $person->retail_type,
+		'channel' => $person->channel,
+		'address_1' => $person->address_1,
+		'latitude' => $person->latitudde,
+		'longitude' => $person->longitude,
 		'email' => empty($person->email) ? '' : mailto($person->email, $person->email),
 		'phone_number' => $person->phone_number,
+		'store_bussiness_name' => $person->store_bussiness_name,
 		'total' => to_currency($stats->total),
 		'messages' => empty($person->phone_number) ? '' : anchor("Messages/view/$person->person_id", '<span class="glyphicon glyphicon-phone"></span>',
 			array('class'=>'modal-dlg', 'data-btn-submit' => $CI->lang->line('common_submit'), 'title'=>$CI->lang->line('messages_sms_send'))),

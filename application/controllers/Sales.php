@@ -846,8 +846,10 @@ class Sales extends Secure_Controller
 			else
 			{
 				$data['customer'] = $customer_info->first_name . ' ' . $customer_info->last_name;
+				$data['customer'] = $customer_info->store_bussiness_name;
 			}
 			$data['first_name'] = $customer_info->first_name;
+			$data['customer'] = $customer_info->store_bussiness_name;
 			$data['last_name'] = $customer_info->last_name;
 			$data['customer_email'] = $customer_info->email;
 			$data['customer_address'] = $customer_info->address_1;

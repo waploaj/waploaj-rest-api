@@ -8,6 +8,7 @@ class Summary_customers extends Summary_report
 	{
 		return array(
 			array('customer_name' => $this->lang->line('reports_customer')),
+			array('store_bussiness_name' =>('shop names')),
 			array('quantity' => $this->lang->line('reports_quantity')),
 			array('subtotal' => $this->lang->line('reports_subtotal'), 'sorter' => 'number_sorter'),
 			array('tax' => $this->lang->line('reports_tax'), 'sorter' => 'number_sorter'),
@@ -19,18 +20,27 @@ class Summary_customers extends Summary_report
 	protected function _select(array $inputs)
 	{
 		parent::_select($inputs);
-
+        
 		$this->db->select('
-				CONCAT(customer_p.first_name, " ", customer_p.last_name) AS customer,
-				SUM(sales_items.quantity_purchased) AS quantity_purchased
+				CONCAT(customer_p.last_name, " ", customer_p.first_name) AS customer,
+				SUM(sales_items.quantity_purchased) AS quantity_purchased,
+				
+				
+				
 		');
+
+	
+			
+		
 	}
+	
 
 	protected function _from()
 	{
 		parent::_from();
 
 		$this->db->join('people AS customer_p', 'sales.customer_id = customer_p.person_id');
+		
 	}
 
 	protected function _group_order()

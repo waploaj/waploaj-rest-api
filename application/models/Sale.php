@@ -83,6 +83,7 @@ class Sale extends CI_Model
 				MAX(customer_p.first_name) AS first_name,
 				MAX(customer_p.last_name) AS last_name,
 				MAX(customer_p.email) AS email,
+				MAX(customer_p.store_bussiness_name) AS store_bussiness_name,
 				MAX(customer_p.comments) AS comments,
 				' . "
 				IFNULL($sale_total, $sale_subtotal) AS amount_due,
@@ -244,6 +245,8 @@ class Sale extends CI_Model
 					$this->db->or_like('CONCAT(customer_p.first_name, " ", customer_p.last_name)', $search);
 					// customer company name
 					$this->db->or_like('customer.company_name', $search);
+					// customer store_bussiness_name
+					$this->db->or_like('customer.store_bussiness_name', $search);
 				$this->db->group_end();
 			}
 		}
@@ -334,6 +337,8 @@ class Sale extends CI_Model
 					$this->db->or_like('CONCAT(customer_p.first_name, " ", customer_p.last_name)', $search);
 					// customer company name
 					$this->db->or_like('customer.company_name', $search);
+					//customer store name
+					$this->db->or_like('customer.store_bussiness_name', $search);
 				$this->db->group_end();
 			}
 		}
@@ -429,18 +434,18 @@ class Sale extends CI_Model
 			$this->db->or_like('first_name', $search);
 			$this->db->or_like('CONCAT(first_name, " ", last_name)', $search);
 			$this->db->or_like('company_name', $search);
+			$this->db->or_like('store_bussiness_name', $search);
 			$this->db->order_by('last_name', 'asc');
 
 			foreach($this->db->get()->result_array() as $result)
 			{
-				$suggestions[] = array('label' => $result['first_name'] . ' ' . $result['last_name']);
+				$suggestions[] = array('label' => $result['first_name'] . ' ' . $result['last_name'] . ' ' . $result['store_bussiness_name']);
 			}
 		}
 		else
 		{
 			$suggestions[] = array('label' => $search);
 		}
-
 		return $suggestions;
 	}
 

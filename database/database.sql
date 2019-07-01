@@ -178,6 +178,21 @@ INSERT INTO `ospos_employees` (`username`, `password`, `person_id`, `deleted`, `
 -- Table structure for table `ospos_giftcards`
 --
 
+CREATE TABLE `ospos_marketinfo` (
+  `posm` varchar(255) NOT NULL,
+  `promomaterial` varchar(255) NOT NULL,
+  `ourprouct` varchar(255) NOT NULL,
+  `person_id` int(10) NOT NULL,
+  
+ 
+  `posm_id` int(10) NOT NULL DEFAULT '0',
+  `comment` text DEFAULT NULL,
+ 
+   PRIMARY KEY ( posm_id ), 
+    FOREIGN KEY (person_id) REFERENCES ospos_customers(person_id) 
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE `ospos_giftcards` (
   `record_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `giftcard_id` int(11) NOT NULL AUTO_INCREMENT,

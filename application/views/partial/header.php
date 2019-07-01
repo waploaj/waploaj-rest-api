@@ -104,7 +104,7 @@
 				</div>
 
 				<div class="navbar-center" style="text-align:center">
-					<strong><?php echo $this->config->item('company'); ?></strong>
+					
 				</div>
 			</div>
 		</div>
@@ -119,7 +119,10 @@
 						<span class="icon-bar"></span>
 					</button>
 			
-					<a class="navbar-brand hidden-sm" href="<?php echo site_url(); ?>">waploaj</a>
+					<a class="navbar-brand hidden-sm" href="<?php echo site_url(); ?>">waploaj
+					<!-- <img src="https://image.ibb.co/nqxDzS/logo.png" alt="Smiley face" height="246" width="90"  > -->
+					</a>
+					
 				</div>
 
 				<div class="navbar-collapse collapse">

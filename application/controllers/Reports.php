@@ -156,6 +156,7 @@ class Reports extends Secure_Controller
 		{
 			$tabular_data[] = $this->xss_clean(array(
 				'customer_name' => $row['customer'],
+				'shop name' => $row['store_bussiness_name'],
 				'quantity' => to_quantity_decimals($row['quantity_purchased']),
 				'subtotal' => to_currency($row['subtotal']),
 				'tax' => to_currency_tax($row['tax']),
