@@ -1,0 +1,651 @@
+{
+	"info": {
+		"_postman_id": "31d9bc68-1a9e-493c-9c9d-30d63439c1ec",
+		"name": "Waploaj",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Login API",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "pointofsale",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost/rest/public/api/EmployeeApi/login",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"rest",
+						"public",
+						"api",
+						"EmployeeApi",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Location Items API",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Token",
+						"value": "MTU2MzcxMjM1Ng==",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "location_id",
+							"value": "-1",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost/rest/public/api/itemsapi/get_location_items",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"rest",
+						"public",
+						"api",
+						"itemsapi",
+						"get_location_items"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Item Detail API",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					},
+					{
+						"key": "X-Token",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "item_id",
+							"value": "1",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost/rest/public/api/itemsapi/get_item_detail",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"rest",
+						"public",
+						"api",
+						"itemsapi",
+						"get_item_detail"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Item Tax Detail API",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					},
+					{
+						"key": "X-Token",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "item_id",
+							"value": "1",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost/rest/public/api/itemsapi/get_item_tax_detail",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"rest",
+						"public",
+						"api",
+						"itemsapi",
+						"get_item_tax_detail"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Item Kit Detail API",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					},
+					{
+						"key": "X-Token",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "item_kit_id",
+							"value": "1",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost/rest/public/api/itemsapi/get_item_kit_detail",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"rest",
+						"public",
+						"api",
+						"itemsapi",
+						"get_item_kit_detail"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Item Quantity API",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Token",
+						"value": "",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "item_id",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "location_id",
+							"value": "1",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost/rest/public/api/ItemsApi/get_item_quantity",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"rest",
+						"public",
+						"api",
+						"ItemsApi",
+						"get_item_quantity"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Item Kit Quantity API",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Token",
+						"value": "",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "item_id",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "item_kit_id",
+							"value": "1",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost/rest/public/api/ItemsApi/get_item_kit_quantity",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"rest",
+						"public",
+						"api",
+						"ItemsApi",
+						"get_item_kit_quantity"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Call Card Customers API",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Token",
+						"value": "",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "card_id",
+							"value": "1",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost/rest/public/api/CustomerApi/get_call_card_customers",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"rest",
+						"public",
+						"api",
+						"CustomerApi",
+						"get_call_card_customers"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Call Card Customers API",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Token",
+								"value": "",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "card_id",
+									"value": "1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost/rest/public/api/CustomerApi/get_call_card_customers",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"rest",
+								"public",
+								"api",
+								"CustomerApi",
+								"get_call_card_customers"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Sun, 21 Jul 2019 16:27:16 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "Apache/2.4.39 (Unix) PHP/7.3.5"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "PHP/7.3.5"
+						},
+						{
+							"key": "Expires",
+							"value": "Thu, 19 Nov 1981 08:52:00 GMT"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-store, no-cache, must-revalidate"
+						},
+						{
+							"key": "Pragma",
+							"value": "no-cache"
+						},
+						{
+							"key": "Content-Length",
+							"value": "2095"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5, max=100"
+						},
+						{
+							"key": "Connection",
+							"value": "Keep-Alive"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json;charset=utf-8"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"status\": \"1\",\n    \"response\": [\n        {\n            \"person_id\": \"3\",\n            \"company_name\": null,\n            \"account_number\": null,\n            \"taxable\": \"1\",\n            \"sales_tax_code\": \"\",\n            \"discount_percent\": \"0.00\",\n            \"package_id\": null,\n            \"points\": null,\n            \"deleted\": \"0\",\n            \"date\": \"2019-02-10 02:13:21\",\n            \"retail_id\": \"2\",\n            \"channel_id\": \"1\",\n            \"latitude\": null,\n            \"longitude\": null,\n            \"location_id\": \"8\",\n            \"visit_id\": \"1\",\n            \"store_bussiness_name\": \"masa shop\",\n            \"card_id\": \"1\",\n            \"retail_name\": \"Duka\",\n            \"channel_name\": \"Retail\",\n            \"first_name\": \"Moha\",\n            \"last_name\": \"Abdillah\",\n            \"gender\": \"1\",\n            \"phone_number\": \"\",\n            \"email\": \"\",\n            \"address_1\": \"\",\n            \"address_2\": \"\",\n            \"city\": \"\",\n            \"state\": \"\",\n            \"zip\": \"\",\n            \"country\": \"\",\n            \"comments\": \"\"\n        },\n        {\n            \"person_id\": \"4\",\n            \"company_name\": null,\n            \"account_number\": null,\n            \"taxable\": \"1\",\n            \"sales_tax_code\": \"\",\n            \"discount_percent\": \"0.00\",\n            \"package_id\": null,\n            \"points\": null,\n            \"deleted\": \"0\",\n            \"date\": \"2019-02-10 02:13:36\",\n            \"retail_id\": \"2\",\n            \"channel_id\": \"1\",\n            \"latitude\": null,\n            \"longitude\": null,\n            \"location_id\": \"8\",\n            \"visit_id\": \"1\",\n            \"store_bussiness_name\": \"masa shop\",\n            \"card_id\": \"1\",\n            \"retail_name\": \"Duka\",\n            \"channel_name\": \"Retail\",\n            \"first_name\": \"Masheu\",\n            \"last_name\": \"Juma\",\n            \"gender\": \"1\",\n            \"phone_number\": \"\",\n            \"email\": \"\",\n            \"address_1\": \"\",\n            \"address_2\": \"\",\n            \"city\": \"\",\n            \"state\": \"\",\n            \"zip\": \"\",\n            \"country\": \"\",\n            \"comments\": \"\"\n        }\n    ]\n}"
+				}
+			]
+		},
+		{
+			"name": "Create Customers API",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Token",
+						"value": "",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "first_name",
+							"value": ",",
+							"type": "text"
+						},
+						{
+							"key": "last_name",
+							"value": ",",
+							"type": "text"
+						},
+						{
+							"key": "address_1",
+							"value": ",",
+							"type": "text"
+						},
+						{
+							"key": "address_2",
+							"value": ",",
+							"type": "text"
+						},
+						{
+							"key": "city",
+							"value": "Dar",
+							"type": "text"
+						},
+						{
+							"key": "country",
+							"value": "Tanzania",
+							"type": "text"
+						},
+						{
+							"key": "phone_number",
+							"value": ",",
+							"type": "text"
+						},
+						{
+							"key": "ward_id",
+							"value": ",",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "visit_id",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "latitude",
+							"value": "1623",
+							"type": "text"
+						},
+						{
+							"key": "longitude",
+							"value": "12.54",
+							"type": "text"
+						},
+						{
+							"key": "channel_id",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "retail_id",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "location_id",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "store_bussiness_name",
+							"value": "Name",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost/rest/public/api/CustomerApi/create_new_customer",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"rest",
+						"public",
+						"api",
+						"CustomerApi",
+						"create_new_customer"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Call Card Customers API",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Token",
+								"value": "",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "card_id",
+									"value": "1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost/rest/public/api/CustomerApi/get_call_card_customers",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"rest",
+								"public",
+								"api",
+								"CustomerApi",
+								"get_call_card_customers"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Sun, 21 Jul 2019 16:27:16 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "Apache/2.4.39 (Unix) PHP/7.3.5"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "PHP/7.3.5"
+						},
+						{
+							"key": "Expires",
+							"value": "Thu, 19 Nov 1981 08:52:00 GMT"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-store, no-cache, must-revalidate"
+						},
+						{
+							"key": "Pragma",
+							"value": "no-cache"
+						},
+						{
+							"key": "Content-Length",
+							"value": "2095"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5, max=100"
+						},
+						{
+							"key": "Connection",
+							"value": "Keep-Alive"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json;charset=utf-8"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"status\": \"1\",\n    \"response\": [\n        {\n            \"person_id\": \"3\",\n            \"company_name\": null,\n            \"account_number\": null,\n            \"taxable\": \"1\",\n            \"sales_tax_code\": \"\",\n            \"discount_percent\": \"0.00\",\n            \"package_id\": null,\n            \"points\": null,\n            \"deleted\": \"0\",\n            \"date\": \"2019-02-10 02:13:21\",\n            \"retail_id\": \"2\",\n            \"channel_id\": \"1\",\n            \"latitude\": null,\n            \"longitude\": null,\n            \"location_id\": \"8\",\n            \"visit_id\": \"1\",\n            \"store_bussiness_name\": \"masa shop\",\n            \"card_id\": \"1\",\n            \"retail_name\": \"Duka\",\n            \"channel_name\": \"Retail\",\n            \"first_name\": \"Moha\",\n            \"last_name\": \"Abdillah\",\n            \"gender\": \"1\",\n            \"phone_number\": \"\",\n            \"email\": \"\",\n            \"address_1\": \"\",\n            \"address_2\": \"\",\n            \"city\": \"\",\n            \"state\": \"\",\n            \"zip\": \"\",\n            \"country\": \"\",\n            \"comments\": \"\"\n        },\n        {\n            \"person_id\": \"4\",\n            \"company_name\": null,\n            \"account_number\": null,\n            \"taxable\": \"1\",\n            \"sales_tax_code\": \"\",\n            \"discount_percent\": \"0.00\",\n            \"package_id\": null,\n            \"points\": null,\n            \"deleted\": \"0\",\n            \"date\": \"2019-02-10 02:13:36\",\n            \"retail_id\": \"2\",\n            \"channel_id\": \"1\",\n            \"latitude\": null,\n            \"longitude\": null,\n            \"location_id\": \"8\",\n            \"visit_id\": \"1\",\n            \"store_bussiness_name\": \"masa shop\",\n            \"card_id\": \"1\",\n            \"retail_name\": \"Duka\",\n            \"channel_name\": \"Retail\",\n            \"first_name\": \"Masheu\",\n            \"last_name\": \"Juma\",\n            \"gender\": \"1\",\n            \"phone_number\": \"\",\n            \"email\": \"\",\n            \"address_1\": \"\",\n            \"address_2\": \"\",\n            \"city\": \"\",\n            \"state\": \"\",\n            \"zip\": \"\",\n            \"country\": \"\",\n            \"comments\": \"\"\n        }\n    ]\n}"
+				}
+			]
+		}
+	]
+}
