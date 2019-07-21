@@ -306,6 +306,20 @@ class Item extends CI_Model
 	}
 
 	/*
+	Gets information about a particular item
+	*/
+	public function get_tax_info($item_id)
+	{
+		$this->db->select('*');
+		$this->db->from('items_taxes');
+		$this->db->where('item_id', $item_id);
+
+		$query = $this->db->get();
+
+		return $query;
+	}
+
+	/*
 	Gets information about a particular item by item id or number
 	*/
 	public function get_info_by_id_or_number($item_id)

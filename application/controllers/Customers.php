@@ -53,8 +53,8 @@ class Customers extends Persons
 	/*
 	Returns customer table data rows. This will be called with AJAX.
 	*/
-	public function search()
-	{
+	public function search(){
+
 		$search = $this->input->get('search');
 		$limit  = $this->input->get('limit');
 		$offset = $this->input->get('offset');
@@ -65,8 +65,8 @@ class Customers extends Persons
 		$total_rows = $this->Customer->get_found_rows($search);
 
 		$data_rows = array();
-		foreach($customers->result() as $person)
-		{
+
+		foreach($customers->result() as $person) {
 			// retrieve the total amount the customer spent so far together with min, max and average values
 			$stats = $this->Customer->get_stats($person->person_id);
 			if(empty($stats))

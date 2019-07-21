@@ -243,5 +243,28 @@ class Item_kit extends CI_Model
 
 		return $this->db->get();
 	}
+
+
+	public function get_item_kit_quantity($item_id, $item_kit_id){
+
+		$this->db->from('item_kit_items');
+		$this->db->where('item_id', $item_id);
+		$this->db->where('item_kit_id', $item_kit_id);
+		$result = $this->db->get()->row();
+		if(empty($result) == TRUE)
+		{
+			$result = new stdClass();
+
+			foreach($this->db->list_fields('item_quantities') as $field)
+			{
+				$result->$field = '';
+			}
+
+			$result->quantity = 0;
+		}
+
+		return $result;
+
+	}
 }
 ?>

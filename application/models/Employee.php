@@ -333,6 +333,28 @@ class Employee extends Person
 		return FALSE;
 	}
 
+	/**
+	 * Function to update login token for employees
+	 * @param array $employee
+	 * @param array $data
+	 * @return bool
+	 */
+
+	public function update_login_token($employee = array(), $data = array()){
+
+		return $this->db->update('employees', $data, $employee);
+
+	}
+
+
+	/*
+	 * Get Employee Permissions
+	 */
+
+	public function get_employee_permissions(){
+
+	}
+
 	/*
 	Logs out a user by destorying all session data and redirect to login
 	*/

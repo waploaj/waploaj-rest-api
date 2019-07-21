@@ -384,5 +384,19 @@ class Customer extends Person
 
 		return $this->db->get();
 	}
+
+	public function get_customers_by_call_card($card_id){
+
+		$query =  $this->db
+			->select('*')
+			->from('customers')
+			->join('retail_type', 'customers.retail_id = retail_type.retail_id')
+			->join('channel', 'customers.channel_id = channel.channel_id')
+			->join('people', 'customers.person_id = people.person_id')
+			->where('card_id', $card_id);
+
+		return $query->get();
+
+	}
 }
 ?>
