@@ -22,18 +22,18 @@
 					"urlencoded": [
 						{
 							"key": "username",
-							"value": "admin",
+							"value": "magufuli",
 							"type": "text"
 						},
 						{
 							"key": "password",
-							"value": "pointofsale",
+							"value": "123456789",
 							"type": "text"
 						}
 					]
 				},
 				"url": {
-					"raw": "localhost/rest/public/api/EmployeeApi/login",
+					"raw": "localhost/rest/public/api/EmployeeApi/login?x-token=none",
 					"host": [
 						"localhost"
 					],
@@ -43,6 +43,12 @@
 						"api",
 						"EmployeeApi",
 						"login"
+					],
+					"query": [
+						{
+							"key": "x-token",
+							"value": "none"
+						}
 					]
 				}
 			},
@@ -646,6 +652,345 @@
 					"body": "{\n    \"status\": \"1\",\n    \"response\": [\n        {\n            \"person_id\": \"3\",\n            \"company_name\": null,\n            \"account_number\": null,\n            \"taxable\": \"1\",\n            \"sales_tax_code\": \"\",\n            \"discount_percent\": \"0.00\",\n            \"package_id\": null,\n            \"points\": null,\n            \"deleted\": \"0\",\n            \"date\": \"2019-02-10 02:13:21\",\n            \"retail_id\": \"2\",\n            \"channel_id\": \"1\",\n            \"latitude\": null,\n            \"longitude\": null,\n            \"location_id\": \"8\",\n            \"visit_id\": \"1\",\n            \"store_bussiness_name\": \"masa shop\",\n            \"card_id\": \"1\",\n            \"retail_name\": \"Duka\",\n            \"channel_name\": \"Retail\",\n            \"first_name\": \"Moha\",\n            \"last_name\": \"Abdillah\",\n            \"gender\": \"1\",\n            \"phone_number\": \"\",\n            \"email\": \"\",\n            \"address_1\": \"\",\n            \"address_2\": \"\",\n            \"city\": \"\",\n            \"state\": \"\",\n            \"zip\": \"\",\n            \"country\": \"\",\n            \"comments\": \"\"\n        },\n        {\n            \"person_id\": \"4\",\n            \"company_name\": null,\n            \"account_number\": null,\n            \"taxable\": \"1\",\n            \"sales_tax_code\": \"\",\n            \"discount_percent\": \"0.00\",\n            \"package_id\": null,\n            \"points\": null,\n            \"deleted\": \"0\",\n            \"date\": \"2019-02-10 02:13:36\",\n            \"retail_id\": \"2\",\n            \"channel_id\": \"1\",\n            \"latitude\": null,\n            \"longitude\": null,\n            \"location_id\": \"8\",\n            \"visit_id\": \"1\",\n            \"store_bussiness_name\": \"masa shop\",\n            \"card_id\": \"1\",\n            \"retail_name\": \"Duka\",\n            \"channel_name\": \"Retail\",\n            \"first_name\": \"Masheu\",\n            \"last_name\": \"Juma\",\n            \"gender\": \"1\",\n            \"phone_number\": \"\",\n            \"email\": \"\",\n            \"address_1\": \"\",\n            \"address_2\": \"\",\n            \"city\": \"\",\n            \"state\": \"\",\n            \"zip\": \"\",\n            \"country\": \"\",\n            \"comments\": \"\"\n        }\n    ]\n}"
 				}
 			]
+		},
+		{
+			"name": "Supplier Details API",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Token",
+						"value": "None",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "supplier_id",
+							"value": "2",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost/rest/public/api/supplierapi/get_supplier_details",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"rest",
+						"public",
+						"api",
+						"supplierapi",
+						"get_supplier_details"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Receiving Details API",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Token",
+						"value": "None",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "receiving_id",
+							"value": "1",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost/rest/public/api/receivingapi/get_receiving_details",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"rest",
+						"public",
+						"api",
+						"receivingapi",
+						"get_receiving_details"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Receiving API",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Token",
+						"value": "None",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "supplier_id",
+							"value": " 2",
+							"type": "text"
+						},
+						{
+							"key": "employee_id",
+							"value": "261",
+							"type": "text"
+						},
+						{
+							"key": "comment",
+							"value": " None",
+							"type": "text"
+						},
+						{
+							"key": "payment_type",
+							"value": "Cash",
+							"type": "text"
+						},
+						{
+							"key": "received_items[0][item_id]",
+							"value": " 1",
+							"type": "text"
+						},
+						{
+							"key": "received_items[0][description]",
+							"value": " None",
+							"type": "text"
+						},
+						{
+							"key": "received_items[0][serialnumber]",
+							"value": " 13243",
+							"type": "text"
+						},
+						{
+							"key": "received_items[0][quantity_purchased]",
+							"value": " 1",
+							"type": "text"
+						},
+						{
+							"key": "received_items[0][receiving_quantity]",
+							"value": " -1",
+							"type": "text"
+						},
+						{
+							"key": "received_items[0][discount_percent]",
+							"value": " 0",
+							"type": "text"
+						},
+						{
+							"key": "received_items[0][item_cost_price]",
+							"value": " 500",
+							"type": "text"
+						},
+						{
+							"key": "received_items[0][item_unit_price]",
+							"value": " 0",
+							"type": "text"
+						},
+						{
+							"key": "received_items[0][item_location]",
+							"value": " 1",
+							"type": "text"
+						},
+						{
+							"key": "received_items[1][item_id]",
+							"value": " 1",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "received_items[1][description]",
+							"value": " None",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "received_items[1][serialnumber]",
+							"value": " 13243",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "received_items[1][quantity_purchased]",
+							"value": " 3",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "received_items[1][receiving_quantity]",
+							"value": " 4",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "received_items[1][discount_percent]",
+							"value": " 0",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "received_items[1][item_cost_price]",
+							"value": " 500",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "received_items[1][item_unit_price]",
+							"value": " 0",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "received_items[1][item_location]",
+							"value": " 1",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "received_items[2][item_id]",
+							"value": " 5",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "received_items[2][description]",
+							"value": " None",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "received_items[2][serialnumber]",
+							"value": " 13243",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "received_items[2][quantity_purchased]",
+							"value": " 3",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "received_items[2][receiving_quantity]",
+							"value": " -4",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "received_items[2][discount_percent]",
+							"value": " 0",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "received_items[2][item_cost_price]",
+							"value": " 500",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "received_items[2][item_unit_price]",
+							"value": " 0",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "received_items[2][item_location]",
+							"value": " 1",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "received_items[3][item_id]",
+							"value": " 3",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "received_items[3][description]",
+							"value": " None",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "received_items[3][serialnumber]",
+							"value": " 132436565",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "received_items[3][quantity_purchased]",
+							"value": " 3",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "received_items[3][receiving_quantity]",
+							"value": " 4",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "received_items[3][discount_percent]",
+							"value": " 0",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "received_items[3][item_cost_price]",
+							"value": " 500",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "received_items[3][item_unit_price]",
+							"value": " 0",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "received_items[3][item_location]",
+							"value": " 1",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost/rest/public/api/receivingapi/create_new_receiving",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"rest",
+						"public",
+						"api",
+						"receivingapi",
+						"create_new_receiving"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
