@@ -139,6 +139,73 @@ class Receiving extends CI_Model
 		return $receiving_id;
 	}
 
+	public function create_new_receiving($receiving_data, $receiving_items_data){
+
+		//Run these queries as a transaction, we want to make sure we do all or nothing
+//		$this->db->trans_start();
+
+		$this->db->insert('receivings', $receiving_data);
+		$receiving_id = $this->db->insert_id();
+
+
+		foreach($receiving_items_data as $line=>$item)
+		{
+			$cur_item_info = $this->Item->get_info($item['item_id']);
+
+			$receivings_items_data = array(
+				'receiving_id' => $receiving_id,
+				'item_id' => $item['item_id'],
+				'description' => $item['description'],
+				'serialnumber' => $item['serialnumber'],
+				'quantity_purchased' => $item['quantity_purchased'],
+				'receiving_quantity' => $item['receiving_quantity'],
+				'discount_percent' => $item['discount_percent'],
+				'item_cost_price' => $cur_item_info->cost_price,
+				'item_unit_price' => $item['item_unit_price'],
+				'item_location' => $item['item_location']
+			);
+			$this->db->insert('receivings_items', $receivings_items_data);
+
+			$items_received = $item['receiving_quantity'] != 0 ? $item['receiving_quantity'] : $item['quantity_purchased'];
+
+			// update cost price, if changed AND is set in config as wanted
+			if($cur_item_info->cost_price != $item['item_unit_price'] && $this->config->item('receiving_calculate_average_price') != FALSE)
+			{
+				$this->Item->change_cost_price($item['item_id'], $items_received, $item['item_unit_price'], $cur_item_info->cost_price);
+			}
+
+			//Update stock quantity
+			$item_quantity = $this->Item_quantity->get_item_quantity($item['item_id'], $item['item_location']);
+			$this->Item_quantity->save(array('quantity' => $item_quantity->quantity + $items_received, 'item_id' => $item['item_id'],
+											  'location_id' => $item['item_location']), $item['item_id'], $item['item_location']);
+
+			$recv_remarks = 'RECV ' . $receiving_id;
+			$inv_data = array(
+				'trans_date' => date('Y-m-d H:i:s'),
+				'trans_items' => $item['item_id'],
+				'trans_user' => $receiving_data['employee_id'],
+				'trans_location' => $item['item_location'],
+				'trans_comment' => $recv_remarks,
+				'trans_inventory' => $items_received
+			);
+
+			$this->db->insert('inventory', $inv_data);
+
+			$supplier = $this->Supplier->get_info($item['supplier_id']);
+
+//			$this->db->insert('receivings_items', $receivings_items_data);
+		}
+
+		$this->db->trans_complete();
+
+		if($this->db->trans_status() === FALSE)
+		{
+			return -1;
+		}
+
+		return $receiving_id;
+	}
+
 	public function delete_list($receiving_ids, $employee_id, $update_inventory = TRUE)
 	{
 		$success = TRUE;
