@@ -88,6 +88,40 @@ class CustomerApi extends CI_Controller
     }
 
 
+    public function get_call_cards()
+    {
+
+        $returnArr['status'] = '0';
+        $returnArr['response'] = '';
+
+        try {
+            if (!$this->input->post()) {
+                $returnArr['response'] = "Only POST method is allowed";
+            } else {
+                $employee_id = $this->input->post('employee_id');
+
+                if ($employee_id == '') {
+                    $returnArr['response'] = "Some Parameters are missing";
+                } else {
+                    $cards = $this->Customer->get_call_cards($employee_id);
+
+                    if (count($cards) < 1) {
+                        $returnArr['response'] = 'No items found';
+                    } else {
+                        $returnArr['status'] = '1';
+                        $returnArr['response'] = $cards->result();
+                    }
+                }
+            }
+        } catch (Exception $ex) {
+            $returnArr['response'] = "Error in connection";
+            $returnArr['error'] = $ex->getMessage();
+        }
+        $response = json_encode($returnArr, JSON_PRETTY_PRINT);
+        echo $response;
+    }
+
+
     public function create_new_customer()
     {
 

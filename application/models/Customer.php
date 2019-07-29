@@ -396,7 +396,17 @@ class Customer extends Person
 			->where('card_id', $card_id);
 
 		return $query->get();
+	}
 
+	public function get_call_cards($employee_id){
+
+		$query =  $this->db
+			->select('*')
+			->from('call_card')
+			->join('visit', 'visit.visit_id = call_card.visit_id')
+			->where('employee_id', $employee_id);
+
+		return $query->get();
 	}
 }
 ?>
