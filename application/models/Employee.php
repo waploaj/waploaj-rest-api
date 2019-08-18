@@ -135,6 +135,31 @@ class Employee extends Person
 
 		return $success;
 	}
+	
+	/*
+	Inserts or updates a Employee attendence
+	*/
+	public function save_attendence(&$attendence_data, $att_id = FALSE)
+	{
+		
+		if(!$att_id == -1 || !$this->exists($att_id))
+		{
+			if($this->db->insert('attendence', $attendence_data))
+			{
+				$attendence_data['att_id'] = $this->db->insert_id();
+
+				return TRUE;
+			}
+
+			return FALSE;
+		}
+
+		$this->db->where('att_id', $att_id);
+
+		return $this->db->update('attendence', $attendence_data);
+	}
+
+
 
 	/*
 	Deletes one employee
