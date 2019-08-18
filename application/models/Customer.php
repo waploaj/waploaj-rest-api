@@ -208,6 +208,29 @@ class Customer extends Person
 
 		return $success;
 	}
+	/*
+	Inserts or updates a survey qns
+	*/
+	public function save_survey(&$survey_data, $survey_id = FALSE)
+	{
+		
+		if(!$survey_id == -1 || !$this->exists($survey_id))
+		{
+			if($this->db->insert('survey', $survey_data))
+			{
+				$survey_data['survey_id'] = $this->db->insert_id();
+
+				return TRUE;
+			}
+
+			return FALSE;
+		}
+
+		$this->db->where('survey_id', $survey_id);
+
+		return $this->db->update('survey', $survey_data);
+	}
+	
 
 	/*
 	Updates reward points value
