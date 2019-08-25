@@ -87,4 +87,32 @@ class SupplierApi extends CI_Controller
         echo $response;
     }
 
+
+    public function get_suppliers()
+    {
+
+        $returnArr['status'] = '0';
+        $returnArr['response'] = '';
+
+        try {
+            if (!$this->input->post()) {
+                $returnArr['response'] = "Only POST method is allowed";
+            } else {
+                $supplier = $this->Supplier->get_all();
+
+                if (count($supplier) < 1) {
+                    $returnArr['response'] = 'No supplier found';
+                } else {
+                    $returnArr['status'] = '1';
+                    $returnArr['response'] = $supplier->result();
+                }
+            }
+        } catch (Exception $ex) {
+            $returnArr['response'] = "Error in connection";
+            $returnArr['error'] = $ex->getMessage();
+        }
+        $response = json_encode($returnArr, JSON_PRETTY_PRINT);
+        echo $response;
+    }
+
 }
