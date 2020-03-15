@@ -143,4 +143,39 @@ class CustomerApi extends CI_Controller
 
     }
 
+    public function get_details()
+    {
+        $returnArr['status'] = '0';
+        $returnArr['response'] = '';
+
+        try {
+            if (!$this->input->post()){
+                $returnArr['response'] = 'Only post method is required';
+            }else{
+                $customer_id = $this->input->post('customer_id');
+
+                if($customer_id == ''){
+                    $returnArr['response'] = 'Some paramater are missing';
+                }else{
+                    $customer = $this->Customer->get_stats($customer_id);
+
+                    if (count($customer<1)){
+                        $returnArr['response'] = 'No Stats about this customer';
+                    }else{
+                        $returnArr['status'] = '1';
+                        $returnArr['response'] = $customer->result();
+                    }
+                }
+            }
+
+        } catch (Exception $ex) {
+            //throw $th;
+            $returnArr['response'] = 'Error in connection';
+            $returnArr['error'] = $ex->getMessage();
+        }
+        $response = json_encode($returnArr, JSON_PRETTY_PRINT);
+        echo $response;
+        
+    }
+
 }
