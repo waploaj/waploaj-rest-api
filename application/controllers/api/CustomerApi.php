@@ -22,7 +22,7 @@ class CustomerApi extends CI_Controller
         $this->load->model('Customer', 'Item', 'Inventory', 'Item_quantity', 'Item_taxes', 'Item_kit');
 
         $this->load->helper(array('cookie', 'date', 'form', 'email'));
-        $this->load->library(array('encrypt', 'form_validation'));
+        $this->load->library(array('encryption', 'form_validation'));
 
         /* Authentication Begin **/
         $headers = $this->input->request_headers();
