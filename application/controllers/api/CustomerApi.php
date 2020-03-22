@@ -22,7 +22,7 @@ class CustomerApi extends CI_Controller
         $this->load->model('Customer', 'Item', 'Inventory', 'Item_quantity', 'Item_taxes', 'Item_kit');
 
         $this->load->helper(array('cookie', 'date', 'form', 'email'));
-        $this->load->library(array('encrypt', 'form_validation'));
+        $this->load->library(array('encryption', 'form_validation'));
 
         /* Authentication Begin **/
         $headers = $this->input->request_headers();
@@ -175,6 +175,41 @@ class CustomerApi extends CI_Controller
         $response = json_encode($returnArr, JSON_PRETTY_PRINT);
         echo $response;
 
+    }
+
+    public function get_details()
+    {
+        $returnArr['status'] = '0';
+        $returnArr['response'] = '';
+
+        try {
+            if (!$this->input->post()){
+                $returnArr['response'] = 'Only post method is required';
+            }else{
+                $customer_id = $this->input->post('customer_id');
+
+                if($customer_id == ''){
+                    $returnArr['response'] = 'Some paramater are missing';
+                }else{
+                    $customer = $this->Customer->get_stats($customer_id);
+
+                    if (count($customer<1)){
+                        $returnArr['response'] = 'No Stats about this customer';
+                    }else{
+                        $returnArr['status'] = '1';
+                        $returnArr['response'] = $customer->result();
+                    }
+                }
+            }
+
+        } catch (Exception $ex) {
+            //throw $th;
+            $returnArr['response'] = 'Error in connection';
+            $returnArr['error'] = $ex->getMessage();
+        }
+        $response = json_encode($returnArr, JSON_PRETTY_PRINT);
+        echo $response;
+        
     }
 
 }
