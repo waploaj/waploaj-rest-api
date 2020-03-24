@@ -19,7 +19,7 @@ class CompetitorApi extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('Supplier','Employee','Customer');
+        $this->load->model('Employee','Customer');
 
         $this->load->helper(array('cookie', 'date', 'form', 'email'));
         $this->load->library(array('encryption', 'form_validation'));
@@ -52,4 +52,31 @@ class CompetitorApi extends CI_Controller
         }
 
     }
+
+    public function get_competitor_qns()
+    {
+        $returnArr['status'] = '0';
+        $returnArr['response'] = '';
+
+        try {
+            if (!$this->input->post()){
+                $returnArr['response'] = "Only post methond is allowed";
+            }else{
+                $competitor = $this->Customer->competitor_details();
+                if (count($competitor < 1)){
+                    $returnArr['response'] = "No competitor question found!";
+                }else{
+                    $returnArr['status'] = 1;
+                    $returnArr['response'] = $competitor;
+                }
+            }
+        } catch (Exception $ex) {
+            $returnArr['response'] = "Error in connection";
+            $returnArr['error'] =  $ex->getMessage();
+        }
+        $response =json_encode($returnArr, JSON_PRETTY_PRINT);
+        echo $response;
+ 
+    }
 }
+?>
