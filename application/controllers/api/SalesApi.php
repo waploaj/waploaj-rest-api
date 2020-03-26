@@ -88,66 +88,6 @@ class SalesApi extends CI_Controller
     }
 
 
-    public function create_new_receiving()
-    {
-        $returnArr['status'] = '0';
-        $returnArr['response'] = '';
-
-        try {
-            if (!$this->input->post()) {
-                $returnArr['response'] = "Only POST method is allowed";
-            } else {
-
-                $receiving_data = array(
-                    'receiving_time' => date('Y-m-d H:i:s'),
-                    'supplier_id' => $this->input->post('supplier_id'),
-                    'employee_id' => $this->input->post('employee_id'),
-                    'comment' => $this->input->post('comment'),
-                    'payment_type' => $this->input->post('payment_type')
-                );
-                $items = $this->input->post('received_items');
-
-                if (!isset($receiving_data)) {
-                    $returnArr['response'] = "Some Parameters are missing";
-                } else {
-
-                    $data = array();
-
-                    foreach($items as $re_item=> $received_item){
-                        $item = array(
-                            'item_id' => $received_item['item_id'],
-                            'description' => $received_item['description'],
-                            'serialnumber' =>$received_item['serialnumber'],
-                            'quantity_purchased' => $received_item['quantity_purchased'],
-                            'item_cost_price' => $received_item['item_cost_price'],
-                            'item_unit_price' => $received_item['item_unit_price'],
-                            'discount_percent' => $received_item['discount_percent'],
-                            'item_location' => $received_item['item_location'],
-                            'receiving_quantity' => $received_item['receiving_quantity']
-                        );
-                        array_push($data, $item);
-                    }
-
-                    $receiving_saved = $this->Receiving->create_new_receiving($receiving_data, $data);
-
-                    if (!$receiving_saved) {
-                        $returnArr['response'] = 'Object not saved';
-                    } else {
-                        $returnArr['status'] = '1';
-                        $returnArr['response'] =  $receiving_saved;
-                    }
-                }
-            }
-        } catch (Exception $ex) {
-            $returnArr['response'] = "Error in connection";
-            $returnArr['error'] = $ex->getMessage();
-        }
-        $response = json_encode($returnArr, JSON_PRETTY_PRINT);
-        echo $response;
-
-    }
-
-
     public function create_sales()
     {
         $returnArr['status'] = '0';
@@ -158,7 +98,7 @@ class SalesApi extends CI_Controller
             }else{
                 $sales_data = array(
                     'sale_time'			=> date('Y-m-d H:i:s'),
-                    'customer_id'		=> $this->Customer->exists($customer_id) ? $customer_id : NULL,
+                    'customer_id'		=> $this->Customer->exists($this->input->post('customer_id')) ? $this->input->post('customer_id') : NULL,
                     'employee_id'		=> $this->input->post('employee_id'),
                     'comment'			=> $this->input->post('comment'),
                     'sale_status'		=> $this->input->post('sale_status'),
@@ -166,7 +106,6 @@ class SalesApi extends CI_Controller
                     'quote_number'		=> $this->input->post('quote_number'),
                     'work_order_number'	=> $this->input->post('work_order_number'),
                     'dinner_table_id'	=> $this->input->post('dinner_table'),
-                    'sale_status'		=> $this->input->post('sale_status'),
                     'sale_type'			=> $this->input->post('sale_type')
                 );
                  
