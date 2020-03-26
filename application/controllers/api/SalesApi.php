@@ -19,7 +19,7 @@ class SalesApi extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('Employee','Sales');
+        $this->load->model('Employee','Sale');
 
         $this->load->helper(array('cookie', 'date', 'form', 'email'));
         $this->load->library(array('encryption', 'form_validation'));
@@ -98,7 +98,7 @@ class SalesApi extends CI_Controller
             }else{
                 $sales_data = array(
                     'sale_time'			=> date('Y-m-d H:i:s'),
-                    'customer_id'		=> $this->Customer->exists($this->input->post('customer_id')) ? $this->input->post('customer_id') : NULL,
+                    'customer_id'		=> $this->input->post('customer_id'), //$this->Customer->exists($this->input->post('customer_id')) ? $this->input->post('customer_id') : NULL,
                     'employee_id'		=> $this->input->post('employee_id'),
                     'comment'			=> $this->input->post('comment'),
                     'sale_status'		=> $this->input->post('sale_status'),
@@ -106,15 +106,19 @@ class SalesApi extends CI_Controller
                     'quote_number'		=> $this->input->post('quote_number'),
                     'work_order_number'	=> $this->input->post('work_order_number'),
                     'dinner_table_id'	=> $this->input->post('dinner_table'),
-                    'sale_type'			=> $this->input->post('sale_type')
+                    'sale_type'			=> $this->input->post('sale_type'),
+                    'sale_id'			=> $this->input->post('sale_id'),
                 );
-                 
-                $sales = $this->Sales->save($sales_data);
-                if (!$sales_data){
+
+                $payments = $this->input->post('payments');
+                $sales_items = $this->input->post('sales_items');
+
+                $sales = $this->Sale->save_sales($sales_data, $sales_items, $payments);
+                if (!$sales){
                     $returnArr['response'] = 'Object Not saved';
                 }else{
                     $returnArr['status'] = '1';
-                    $returnArr['response'];
+                    $returnArr['response'] = $sales;
                 }
             }
         } catch (Exception $ex) {

@@ -1,4 +1,8 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+
+ini_set('error_reporting', 1);
+ini_set('display_errors', 1);
+if (!defined('BASEPATH')) exit('No direct script access allowed');
 
 define('COMPLETED', 0);
 define('SUSPENDED', 1);
@@ -9,6 +13,7 @@ define('SALE_TYPE_INVOICE', 1);
 define('SALE_TYPE_WORK_ORDER', 2);
 define('SALE_TYPE_QUOTE', 3);
 define('SALE_TYPE_RETURN', 4);
+
 
 /**
  * Sale class
@@ -589,7 +594,6 @@ class Sale extends CI_Model
 			'customer_id'		=> $this->Customer->exists($customer_id) ? $customer_id : NULL,
 			'employee_id'		=> $employee_id,
 			'comment'			=> $comment,
-			'sale_status'		=> $sale_status,
 			'invoice_number'	=> $invoice_number,
 			'quote_number'		=> $quote_number,
 			'work_order_number'	=> $work_order_number,
@@ -794,6 +798,220 @@ class Sale extends CI_Model
 	 * of VAT tax which becomes a price component.  VAT taxes must still be reported
 	 * as a separate tax entry on the invoice.
 	 */
+
+
+
+
+	/**
+	 * Save the sale information after the sales is complete but before the final document is printed
+	 * The sales_taxes variable needs to be initialized to an empty array before calling
+	 */
+	public function save_sales($sales_data, $sales_items_data_array, $payments_data)
+	{
+		if($sales_data['sale_id'] != -1)
+		{
+			$this->clear_suspended_sale_detail($sales_data['sale_id']);
+		}
+
+		$tax_decimals = tax_decimals();
+		$table_status = $this->determine_sale_status($sales_data['sale_status'], $sales_data['dinner_table_id']);
+
+		$sales_data = array(
+			'sale_time'			=> date('Y-m-d H:i:s'),
+			'customer_id'		=> $sales_data['customer_id'], //$this->Customer->exists($sales_data['customer_id']) ? $sales_data['customer_id'] : NULL,
+			'employee_id'		=> $sales_data['employee_id'],
+			'comment'			=> $sales_data['comment'],
+			'invoice_number'	=> $sales_data['invoice_number'],
+			'quote_number'		=> $sales_data['quote_number'],
+			'work_order_number'	=> $sales_data['work_order_number'],
+			'dinner_table_id'	=> $sales_data['dinner_table_id'],
+			'sale_status'		=> $sales_data['sale_status'],
+			'sale_type'			=> $sales_data['sale_type']
+		);
+
+		// Run these queries as a transaction, we want to make sure we do all or nothing
+		$this->db->trans_start();
+
+		// Note: Invoice Number, Quote Number are Unique
+		$this->db->insert('sales', $sales_data);
+		$sale_id = $this->db->insert_id();
+
+		$total_amount = 0;
+		$total_amount_used = 0;
+		foreach($payments_data as $payment_id=>$payment)
+		{
+			if( substr( $payment['payment_type'], 0, strlen( $this->lang->line('sales_giftcard') ) ) == $this->lang->line('sales_giftcard') )
+			{
+				// We have a gift card and we have to deduct the used value from the total value of the card.
+				$splitpayment = explode( ':', $payment['payment_type'] );
+				$cur_giftcard_value = $this->Giftcard->get_giftcard_value( $splitpayment[1] );
+				$this->Giftcard->update_giftcard_value( $splitpayment[1], $cur_giftcard_value - $payment['payment_amount'] );
+			}
+
+			if( substr( $payment['payment_type'], 0, strlen( $this->lang->line('sales_rewards') ) ) == $this->lang->line('sales_rewards') )
+			{
+
+				$cur_rewards_value = $this->Customer->get_info($sales_data['customer_id'])->points;
+				$this->Customer->update_reward_points_value($sales_data['customer_id'], $cur_rewards_value - $payment['payment_amount'] );
+				$total_amount_used = floatval($total_amount_used) + floatval($payment['payment_amount']);
+			}
+
+			$sales_payments_data = array(
+				'sale_id'		 => $sale_id,
+				'payment_type'	 => $payment['payment_type'],
+				'payment_amount' => $payment['payment_amount']
+			);
+			$this->db->insert('sales_payments', $sales_payments_data);
+			$total_amount = floatval($total_amount) + floatval($payment['payment_amount']);
+		}
+
+		$this->save_customer_rewards($sales_data['customer_id'], $sale_id, $total_amount, $total_amount_used);
+
+		$customer = $this->Customer->get_info($sales_data['customer_id']);
+
+		$sales_taxes = array();
+
+		foreach($sales_items_data_array as $index=>$item)
+		{
+			$cur_item_info = $this->Item->get_info($item['item_id']);
+
+			$sales_items_data = array(
+				'sale_id'			=> $sale_id,
+				'item_id'			=> $item['item_id'],
+				'line'				=> $index,
+				'description'		=> character_limiter($item['description'], 255),
+				'serialnumber'		=> character_limiter($item['serialnumber'], 30),
+				'quantity_purchased'=> $item['quantity'],
+				'discount_percent'	=> $item['discount'],
+				'item_cost_price'	=> $item['cost_price'],
+				'item_unit_price'	=> $item['price'],
+				'item_location'		=> $item['item_location'],
+				'print_option'		=> $item['print_option']
+			);
+
+			$this->db->insert('sales_items', $sales_items_data);
+
+			if($cur_item_info->stock_type == HAS_STOCK && $sales_data['sale_status'] == COMPLETED)
+			{
+				// Update stock quantity if item type is a standard stock item and the sale is a standard sale
+				$item_quantity = $this->Item_quantity->get_item_quantity($item['item_id'], $item['item_location']);
+				$this->Item_quantity->save(array('quantity'	=> $item_quantity->quantity - $item['quantity'],
+					'item_id'		=> $item['item_id'],
+					'location_id'	=> $item['item_location']), $item['item_id'], $item['item_location']);
+
+				// if an items was deleted but later returned it's restored with this rule
+
+				if($item['quantity'] < 0)
+				{
+					$this->Item->undelete($item['item_id']);
+				}
+
+				// Inventory Count Details
+				$sale_remarks = 'POS '.$sale_id;
+				$inv_data = array(
+					'trans_date'		=> date('Y-m-d H:i:s'),
+					'trans_items'		=> $item['item_id'],
+					'trans_user'		=> $sales_data['employee_id'],
+					'trans_location'	=> $item['item_location'],
+					'trans_comment'		=> $sale_remarks,
+					'trans_inventory'	=> -$item['quantity']
+				);
+				$this->Inventory->insert($inv_data);
+			}
+
+			// Calculate taxes and save the tax information for the sale.  Return the result for printing
+
+			if($sales_data['customer_id'] == -1 || $customer->taxable)
+			{
+				if($this->config->item('tax_included'))
+				{
+					$tax_type = Tax_lib::TAX_TYPE_VAT;
+				}
+				else
+				{
+					$tax_type = Tax_lib::TAX_TYPE_SALES;
+				}
+				$rounding_code = Rounding_mode::HALF_UP; // half adjust
+				$tax_group_sequence = 0;
+				$item_total = $this->sale_lib->get_item_total($item['quantity'], $item['price'], $item['discount'], TRUE);
+				$tax_basis = $item_total;
+				$item_tax_amount = 0;
+
+				foreach($this->Item_taxes->get_info($item['item_id']) as $row)
+				{
+
+					$sales_items_taxes = array(
+						'sale_id'			=> $sale_id,
+						'item_id'			=> $item['item_id'],
+						'line'				=> $item['line'],
+						'name'				=> character_limiter($row['name'], 255),
+						'percent'			=> $row['percent'],
+						'tax_type'			=> $tax_type,
+						'rounding_code'		=> $rounding_code,
+						'cascade_tax'		=> 0,
+						'cascade_sequence'	=> 0,
+						'item_tax_amount'	=> 0
+					);
+
+					// This computes tax for each line item and adds it to the tax type total
+					$tax_group = (float)$row['percent'] . '% ' . $row['name'];
+					$tax_basis = $this->sale_lib->get_item_total($item['quantity'], $item['price'], $item['discount'], TRUE);
+
+					if($this->config->item('tax_included'))
+					{
+						$tax_type = Tax_lib::TAX_TYPE_VAT;
+						$item_tax_amount = $this->sale_lib->get_item_tax($item['quantity'], $item['price'], $item['discount'],$row['percent']);
+					}
+					elseif($this->config->item('customer_sales_tax_support') == '0')
+					{
+						$tax_type = Tax_lib::TAX_TYPE_SALES;
+						$item_tax_amount = $this->tax_lib->get_sales_tax_for_amount($tax_basis, $row['percent'], '0', $tax_decimals);
+					}
+					else
+					{
+						$tax_type = Tax_lib::TAX_TYPE_SALES;
+					}
+
+					$sales_items_taxes['item_tax_amount'] = $item_tax_amount;
+					if($item_tax_amount != 0)
+					{
+						$this->db->insert('sales_items_taxes', $sales_items_taxes);
+						$this->tax_lib->update_sales_taxes($sales_taxes, $tax_type, $tax_group, $row['percent'], $tax_basis, $item_tax_amount, $tax_group_sequence, $rounding_code, $sale_id,  $row['name'], '');
+						$tax_group_sequence += 1;
+					}
+
+				}
+
+				if($this->config->item('customer_sales_tax_support') == '1')
+				{
+					$this->save_sales_item_tax($customer, $sale_id, $item, $item_total, $sales_taxes, $sequence, $cur_item_info->tax_category_id);
+				}
+			}
+		}
+
+		if($sales_data['customer_id'] == -1 || $customer->taxable)
+		{
+			$this->tax_lib->round_sales_taxes($sales_taxes);
+			$this->save_sales_tax($sales_taxes);
+		}
+
+		$dinner_table_data = array(
+			'status' => $table_status
+		);
+
+		$this->db->where('dinner_table_id',$sales_data['dinner_table_id']);
+		$this->db->update('dinner_tables', $dinner_table_data);
+
+		$this->db->trans_complete();
+
+		if($this->db->trans_status() === FALSE)
+		{
+			return -1;
+		}
+
+		return $sale_id;
+	}
+
 	public function save_sales_item_tax(&$customer, &$sale_id, &$item, $tax_basis, &$sales_taxes, &$sequence, $tax_category_id)
 	{
 		// if customer sales tax is enabled then update  sales_items_taxes with the
