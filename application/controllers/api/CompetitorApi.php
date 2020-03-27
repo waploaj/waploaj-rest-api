@@ -9,7 +9,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 /**
  * @property  employee
  */
-class SupplierApi extends CI_Controller
+class CompetitorApi extends CI_Controller
 {
 
     private $staff_token;
@@ -19,10 +19,10 @@ class SupplierApi extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('Supplier','Employee');
+        $this->load->model('Employee','Customer');
 
         $this->load->helper(array('cookie', 'date', 'form', 'email'));
-        $this->load->library(array('encrypt', 'form_validation'));
+        $this->load->library(array('encryption', 'form_validation'));
 
         /* Authentication Begin **/
         $headers = $this->input->request_headers();
@@ -53,66 +53,68 @@ class SupplierApi extends CI_Controller
 
     }
 
-
-    public function get_supplier_details()
+    public function get_competitor_qns()
     {
-
         $returnArr['status'] = '0';
         $returnArr['response'] = '';
 
         try {
-            if (!$this->input->post()) {
-                $returnArr['response'] = "Only POST method is allowed";
-            } else {
-                $supplier_id = $this->input->post('supplier_id');
+            if ($this->input->post()){
+                $returnArr['response'] = "Only post methond is allowed";
+            }else{
+                $competitor = $this->Customer->competitor_details();
+                if (count($competitor < 1)){
+                    $returnArr['response'] = "No competitor question found!";
+                }else{
+                    $returnArr['status'] = 1;
+                    $returnArr['response'] = $competitor;
+                }
+            }
+        } catch (Exception $ex) {
+            $returnArr['response'] = "Error in connection";
+            $returnArr['error'] =  $ex->getMessage();
+        }
+        $response =json_encode($returnArr, JSON_PRETTY_PRINT);
+        echo $response;
+ 
+    }
 
-                if ($supplier_id == '') {
-                    $returnArr['response'] = "Some Parameters are missing";
-                } else {
-                    $supplier = $this->Supplier->get_info($supplier_id);
+    public function competitor_ans()
+    {
+        $returnArr['status'] = '0';
+        $returnArr['response'] = '';
 
-                    if (count($supplier) < 1) {
-                        $returnArr['response'] = 'No supplier found';
-                    } else {
+        try {
+            if (!$this->input->post()){
+                $returnArr['response'] = "Only post method is allowed";
+
+            }else{
+                $answer = array(
+                    'time' => $this->input->post('time'),
+                    'customer_id' => $this->input->post('customer_id'),
+                    'employee_id' => $this->input->post('employee_id'),
+                );
+
+                if(!isset($answer)){
+                    $returnArr['response'] = "Some parameter are missing!";
+
+                }else{
+                    $save_answer =  $this->Customer->save_answer($answer);
+
+                    if(!$save_answer){
+                        $returnArr['response'] = "Data are not saved";
+                    }else{
                         $returnArr['status'] = '1';
-                        $returnArr['response'] = $supplier;
+                        $returnArr['response'] = $save_answer;
                     }
                 }
             }
         } catch (Exception $ex) {
             $returnArr['response'] = "Error in connection";
-            $returnArr['error'] = $ex->getMessage();
+            $returnArr['error'] =  $ex->getMessage();
         }
         $response = json_encode($returnArr, JSON_PRETTY_PRINT);
         echo $response;
     }
-
-
-    public function get_suppliers()
-    {
-
-        $returnArr['status'] = '0';
-        $returnArr['response'] = '';
-
-        try {
-            if (!$this->input->post()) {
-                $returnArr['response'] = "Only POST method is allowed";
-            } else {
-                $supplier = $this->Supplier->get_all();
-
-                if (count($supplier) < 1) {
-                    $returnArr['response'] = 'No supplier found';
-                } else {
-                    $returnArr['status'] = '1';
-                    $returnArr['response'] = $supplier->result();
-                }
-            }
-        } catch (Exception $ex) {
-            $returnArr['response'] = "Error in connection";
-            $returnArr['error'] = $ex->getMessage();
-        }
-        $response = json_encode($returnArr, JSON_PRETTY_PRINT);
-        echo $response;
-    }
-
 }
+?>

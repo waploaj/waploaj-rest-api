@@ -5,11 +5,7 @@ ini_set('display_errors', 1);
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-
-/**
- * @property  employee
- */
-class SupplierApi extends CI_Controller
+class SurveyApi extends CI_Controller
 {
 
     private $staff_token;
@@ -19,10 +15,10 @@ class SupplierApi extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('Supplier','Employee');
+        $this->load->model('Customer', 'Item', 'Employee');
 
         $this->load->helper(array('cookie', 'date', 'form', 'email'));
-        $this->load->library(array('encrypt', 'form_validation'));
+        $this->load->library(array('encryption', 'form_validation'));
 
         /* Authentication Begin **/
         $headers = $this->input->request_headers();
@@ -47,14 +43,13 @@ class SupplierApi extends CI_Controller
         } else {
             $response['status'] = '0';
             $response['response'] = 'Token not provided';
-            echo json_encode($response, JSON_PRETTY_PRINT);
+            echo json_encode($response, JSON_PRETTY_PRINT | JSON_FORCE_OBJECT);
             exit;
         }
 
     }
 
-
-    public function get_supplier_details()
+    public function create_survey()
     {
 
         $returnArr['status'] = '0';
@@ -64,18 +59,31 @@ class SupplierApi extends CI_Controller
             if (!$this->input->post()) {
                 $returnArr['response'] = "Only POST method is allowed";
             } else {
-                $supplier_id = $this->input->post('supplier_id');
 
-                if ($supplier_id == '') {
+                $survey_data = array(
+                    'customer_id' => $this->input->post('customer_id'),
+                    'like' => $this->input->post('like'),
+                    'rate' => $this->input->post('rate'),
+                    'sugested' => $this->input->post('sugested'),
+                    'use_again' => $this->input->post('use_again'),
+                    'item_liked' => $this->input->post('item_liked'),
+                    'reason_not' => $this->input->post('reason_not'),
+                    'customer_comment' => $this->input->post('customer_comment'),
+                    'date' => $this->input->post('date')
+
+                );
+
+                if (!isset($survey_data) ) {
                     $returnArr['response'] = "Some Parameters are missing";
                 } else {
-                    $supplier = $this->Supplier->get_info($supplier_id);
 
-                    if (count($supplier) < 1) {
-                        $returnArr['response'] = 'No supplier found';
+                    $customer = $this->Customer->save_survey($survey_data);
+
+                    if (!$customer) {
+                        $returnArr['response'] = 'No survery Answers';
                     } else {
                         $returnArr['status'] = '1';
-                        $returnArr['response'] = $supplier;
+                        $returnArr['response'] =  $customer;
                     }
                 }
             }
@@ -85,34 +93,7 @@ class SupplierApi extends CI_Controller
         }
         $response = json_encode($returnArr, JSON_PRETTY_PRINT);
         echo $response;
-    }
 
-
-    public function get_suppliers()
-    {
-
-        $returnArr['status'] = '0';
-        $returnArr['response'] = '';
-
-        try {
-            if (!$this->input->post()) {
-                $returnArr['response'] = "Only POST method is allowed";
-            } else {
-                $supplier = $this->Supplier->get_all();
-
-                if (count($supplier) < 1) {
-                    $returnArr['response'] = 'No supplier found';
-                } else {
-                    $returnArr['status'] = '1';
-                    $returnArr['response'] = $supplier->result();
-                }
-            }
-        } catch (Exception $ex) {
-            $returnArr['response'] = "Error in connection";
-            $returnArr['error'] = $ex->getMessage();
-        }
-        $response = json_encode($returnArr, JSON_PRETTY_PRINT);
-        echo $response;
     }
 
 }

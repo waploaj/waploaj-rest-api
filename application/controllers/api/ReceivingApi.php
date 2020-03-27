@@ -22,7 +22,7 @@ class ReceivingApi extends CI_Controller
         $this->load->model('Receiving','Employee');
 
         $this->load->helper(array('cookie', 'date', 'form', 'email'));
-        $this->load->library(array('encrypt', 'form_validation'));
+//        $this->load->library(array('encryption', 'form_validation'));
 
         /* Authentication Begin **/
         $headers = $this->input->request_headers();
@@ -87,7 +87,6 @@ class ReceivingApi extends CI_Controller
         echo $response;
     }
 
-
     public function create_new_receiving()
     {
         $returnArr['status'] = '0';
@@ -113,22 +112,25 @@ class ReceivingApi extends CI_Controller
 
                     $data = array();
 
-                    foreach($items as $re_item=> $received_item){
+                    foreach($items as $index => $received_item){
                         $item = array(
                             'item_id' => $received_item['item_id'],
                             'description' => $received_item['description'],
+                            'line' => $index,
                             'serialnumber' =>$received_item['serialnumber'],
-                            'quantity_purchased' => $received_item['quantity_purchased'],
-                            'item_cost_price' => $received_item['item_cost_price'],
-                            'item_unit_price' => $received_item['item_unit_price'],
-                            'discount_percent' => $received_item['discount_percent'],
+                            'quantity' => $received_item['quantity_purchased'],
+                            'price' => $received_item['item_unit_price'],
+                            'discount' => $received_item['discount_percent'],
                             'item_location' => $received_item['item_location'],
                             'receiving_quantity' => $received_item['receiving_quantity']
                         );
-                        array_push($data, $item);
+                        $data = array_push($data, $item);
                     }
 
-                    $receiving_saved = $this->Receiving->create_new_receiving($receiving_data, $data);
+                    $receiving_saved = $this->Receiving->create_new_receiving(
+                        $receiving_data,
+                        $this->input->post('received_items')
+                    );
 
                     if (!$receiving_saved) {
                         $returnArr['response'] = 'Object not saved';

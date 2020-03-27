@@ -22,7 +22,7 @@ class EmployeeApi extends CI_Controller
         $this->load->model('Employee');
 
         $this->load->helper(array('cookie', 'date', 'form', 'email'));
-        $this->load->library(array('encrypt', 'form_validation'));
+        $this->load->library(array('encryption', 'form_validation'));
 
         /* Authentication Begin **/
         $headers = $this->input->request_headers();
@@ -51,6 +51,49 @@ class EmployeeApi extends CI_Controller
         }
 
     }
+    
+      public function create_attendence()
+    {
+
+        $returnArr['status'] = '0';
+        $returnArr['response'] = '';
+
+        try {
+            if (!$this->input->post()) {
+                $returnArr['response'] = "Only POST method is allowed";
+            } else {
+
+                $attendence_data = array(
+                    'customer_id' => $this->input->post('customer_id'),
+                    'employee_id' => $this->input->post('employee_id'),
+                    'checkin_time' => $this->input->post('checkin_time'),
+                    'checkout_time' => $this->input->post('checkout_time')
+
+                );
+
+                if (!isset($attendence_data) ) {
+                    $returnArr['response'] = "Some Parameters are missing";
+                } else {
+
+                    $employee = $this->Employee->save_attendence($attendence_data);
+
+                    if (!$employee) {
+                        $returnArr['response'] = 'No data found';
+                    } else {
+                        $returnArr['status'] = '1';
+                        $returnArr['response'] =  $employee;
+                    }
+                }
+            }
+        } catch (Exception $ex) {
+            $returnArr['response'] = "Error in connection";
+            $returnArr['error'] = $ex->getMessage();
+        }
+        $response = json_encode($returnArr, JSON_PRETTY_PRINT);
+        echo $response;
+
+    }
+
 
 
     public function login(){
