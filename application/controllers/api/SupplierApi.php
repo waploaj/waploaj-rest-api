@@ -22,7 +22,7 @@ class SupplierApi extends CI_Controller
         $this->load->model('Supplier','Employee');
 
         $this->load->helper(array('cookie', 'date', 'form', 'email'));
-        $this->load->library(array('encrypt', 'form_validation'));
+       // $this->load->library(array('encrypt', 'form_validation'));
 
         /* Authentication Begin **/
         $headers = $this->input->request_headers();
