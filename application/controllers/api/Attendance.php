@@ -56,7 +56,9 @@ class Attendance
                     'customer_id' => $this->input->post('customer_id'),
                     'employee_id' => $this->input->post('employee_id'),
                     'checkin_time' => $this->input->post('checkin_time'),
-                    'checkout_time' => $this->input->post('checkout_time')
+                    'checkout_time' => $this->input->post('checkout_time'),
+                    'latitude' => $this->input->post('latitude'),
+                    'longitude' =>$this->input->post('longitude')
                 );
                 if(!isset($attendance_data)){
                     $returnArr['response'] = "Some parameter is missing";
@@ -77,6 +79,36 @@ class Attendance
         $response = json_encode($returnArr, JSON_PRETTY_PRINT);
         echo $response;
 
+    }
+
+    public function ads()
+    {
+        $returnArr['status'] = '0';
+        $returnArr['response'] = '';
+
+        try {
+            if(!$this->input->post()){
+                $returnArr['response'] = "Only Post Method is allowed";
+            }else{
+                $ads_data = array(
+                    'pic_file' =>$this->input->post('pic_file'),
+                    'latitude' =>$this->input->post('latitude'),
+                    'longitude' =>$this->input->post('longitude')
+                );
+                $ad = $this->Customer->save_ads($ads_data);
+                if(!$ad){
+                    $returnArr['response'] = "no ads updated";
+                }else{
+                    $returnArr['status'] = '1';
+                    $returnArr['response'] = $ad;
+                }
+            }
+        }catch (Exception $ex){
+            $returnArr['response'] = " Erro in connection";
+            $returnArr['error'] = $ex->getMessage();
+        }
+        $response = json_encode($returnArr, JSON_PRETTY_PRINT);
+        echo $response;
     }
 
 
